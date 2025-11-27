@@ -36,14 +36,27 @@
         body {
             font-family: 'Zen Maru Gothic', sans-serif;
             background-color: var(--ac-green);
-            /* 更細緻的斜紋背景 */
-            background-image:
-                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255, 255, 255, 0.2) 20px, rgba(255, 255, 255, 0.2) 40px);
+            /* 背景改為指定圖片，保留主題色作為 fallback */
+            background-image: url("https://images.unsplash.com/photo-1763669029286-7f1662eb921d?q=80");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             min-height: 100vh;
             color: var(--ac-dark);
             /* 防止 iOS 左右滑動 */
             overflow-x: hidden;
             padding-bottom: 20px;
+            position: relative;
+        }
+
+        /* 全站暗色遮罩，置於背景之上、內容之下 */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* 頂部狀態列 */
@@ -84,6 +97,8 @@
             max-width: 600px;
             /* 限制在大手機寬度 */
             margin: 0 auto;
+            position: relative;
+            z-index: 5; /* 確保內容在遮罩之上 */
         }
 
         /* === 核心：今日焦點卡片 === */
@@ -249,12 +264,27 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: var(--ac-green);
+            /* Loading 畫面也套用相同背景，並保留主色作為 fallback */
+            background: var(--ac-green) url("https://images.unsplash.com/photo-1763669029358-401b2f5516a9?q=80") center/cover no-repeat;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 999;
+        }
+
+        /* Loading 的遮罩，呈現在 loading 背景之上但內容之下 */
+        .loading-screen::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 1;
+        }
+
+        .loading-screen > * {
+            position: relative;
+            z-index: 2;
         }
     </style>
 </head>
@@ -295,7 +325,7 @@
 
         function getAdvice(rainProb, maxTemp) {
             let rainIcon = "🌂";
-            let rainText = "不用帶傘";
+            let rainText = "不用帶傘啦~爽";
             if (parseInt(rainProb) > 30) {
                 rainIcon = "☂️";
                 rainText = "記得帶傘！";
