@@ -35,9 +35,8 @@
 
         body {
             font-family: 'Zen Maru Gothic', sans-serif;
-            background-color: var(--ac-green);
-            /* 背景改為指定圖片，保留主題色作為 fallback */
-            background-image: url("https://images.unsplash.com/photo-1763669029286-7f1662eb921d?q=80");
+            /* 只使用圖片作為背景（移除紅色 fallback） */
+            background-image: url("https://images.unsplash.com/photo-1763669029223-74f911a9e08b?q=80");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -49,12 +48,13 @@
             position: relative;
         }
 
-        /* 全站暗色遮罩，置於背景之上、內容之下 */
+        /* 全站漸層暗色遮罩，置於背景之上、內容之下 */
         body::before {
             content: "";
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.35);
+            /* 漸層：上深下淺，提升頂部標題/狀態列對比 */
+            background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.18) 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -264,8 +264,11 @@
             left: 0;
             right: 0;
             bottom: 0;
-            /* Loading 畫面也套用相同背景，並保留主色作為 fallback */
-            background: var(--ac-green) url("https://images.unsplash.com/photo-1763669029358-401b2f5516a9?q=80") center/cover no-repeat;
+            /* Loading 畫面只使用指定圖片作背景，不再使用紅色 fallback */
+            background-image: url("https://images.unsplash.com/photo-1763669029286-7f1662eb921d?q=80");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -278,7 +281,8 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: rgba(0,0,0,0.45);
+            /* Loading 遮罩改為平滑漸層（上方較深）以保留中心視覺亮點 */
+            background: linear-gradient(180deg, rgba(0,0,0,0.66) 0%, rgba(0,0,0,0.38) 100%);
             z-index: 1;
         }
 
